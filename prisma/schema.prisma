@@ -16,10 +16,12 @@ model User {
   name          String?
   image         String?
   password      String?
+  pointsTotal   Int       @default(0)
   createdAt     DateTime  @default(now()) @map("created_at")
   updatedAt     DateTime  @updatedAt @map("updated_at")
 
   accounts Account[]
+  transactions Transaction[]
   sessions Session[]
 
   @@map("users")
@@ -63,4 +65,32 @@ model VerificationToken {
 
   @@unique([identifier, token])
   @@map("verification_tokens")
+}
+
+model Establishment {
+  id           String @id @default(cuid())
+  name         String @unique
+  qrCode       String @unique
+  pointsPerEuro Float @default(1.0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  transactions Transaction[]
+
+  @@map("establishments")
+}
+
+model Transaction {
+  id             String @id @default(cuid())
+  userId         String
+  establishmentId String
+  amount         Float
+  pointsEarned   Int
+  ticketImage    String?
+  createdAt      DateTime @default(now())
+
+  user           User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  establishment  Establishment @relation(fields: [establishmentId], references: [id])
+
+  @@map("transactions")
 }
