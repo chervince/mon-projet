@@ -1,6 +1,6 @@
 datasource db {
   provider  = "postgresql"
-  url       = env("DATABASE_URL")
+  url       = "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:5432/${POSTGRES_DATABASE}"
 }
 
 generator client {
