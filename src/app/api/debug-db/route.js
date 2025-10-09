@@ -1,35 +1,20 @@
-// Endpoint temporaire pour tester la DB en production
-import { PrismaClient } from '@prisma/client';
+import { NextResponse } from 'next/server';
 
-const prisma = new PrismaClient();
-
-export default async function handler(req, res) {
-  if (req.method !== 'GET') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
-
+export async function GET() {
   try {
-    console.log('Testing database connection...');
-    await prisma.$connect();
-    console.log('✅ Connected to database successfully!');
-    
-    // Test simple query
-    const userCount = await prisma.user.count();
-    console.log(`📊 Users in database: ${userCount}`);
-    
-    res.status(200).json({
-      success: true,
-      message: 'Database connection successful',
-      userCount: userCount
+    return NextResponse.json({
+      message: 'Debug endpoint working!',
+      timestamp: new Date().toISOString(),
+      env: {
+        hasDatabaseUrl: !!process.env.DATABASE_URL,
+        hasPrismaUrl: !!process.env.POSTGRES_PRISMA_URL,
+        nodeEnv: process.env.NODE_ENV
+      }
     });
-    
   } catch (error) {
-    console.error('❌ Database connection failed:', error.message);
-    res.status(500).json({
-      success: false,
-      error: error.message
-    });
-  } finally {
-    await prisma.$disconnect();
+    return NextResponse.json({
+      error: 'Something went wrong',
+      message: error.message
+    }, { status: 500 });
   }
 }
