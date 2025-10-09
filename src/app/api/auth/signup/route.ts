@@ -12,10 +12,13 @@ const signupSchema = z.object({
 });
 
 export async function POST(request: NextRequest) {
+  console.log("Signup API called");
   try {
     const body = await request.json();
     const { email, password, name } = signupSchema.parse(body);
+    console.log("Parsed data:", { email, name });
 
+    console.log("Checking existing user...");
     const existingUser = await prisma.user.findUnique({
       where: { email },
     });
@@ -29,6 +32,7 @@ export async function POST(request: NextRequest) {
 
     const hashedPassword = await bcrypt.hash(password, 12);
 
+    console.log("Creating user...");
     const user = await prisma.user.create({
       data: {
         email,
