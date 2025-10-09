@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Fidélisation PME",
   description: "Application de fidélisation pour petits commerces et PME",
-  manifest: "/manifest.json",
+  manifest: "/manifest.json?v=2",
 };
 
 export default function RootLayout({
@@ -26,15 +26,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <link rel="manifest" href="/manifest.json" />
+      <link rel="manifest" href="/manifest.json?v=2" />
       <meta name="theme-color" content="#000000" />
       <link rel="icon" href="/favicon.ico" />
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Providers>
-          {children}
-        </Providers>
+        <Providers>{children}</Providers>
         <script
           dangerouslySetInnerHTML={{
             __html: `
