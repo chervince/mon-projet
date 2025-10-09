@@ -1,41 +1,48 @@
 import { NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import pkg from 'pg';
+const { Client } = pkg;
 
 export async function GET() {
+  const client = new Client({
+    connectionString: process.env.DATABASE_URL,
+  });
+
   try {
-    console.log('🔍 Testing Prisma connection...');
-    await prisma.$connect();
-    console.log('✅ Prisma connected successfully!');
+    console.log('🔍 Testing direct PostgreSQL connection from Vercel...');
+    console.log('Host:', process.env.DATABASE_URL?.split('@')[1]?.split(':')[0]);
+    
+    await client.connect();
+    console.log('✅ Connected to PostgreSQL successfully!');
 
-    // Test simple query
-    const userCount = await prisma.user.count();
-    console.log(`📊 Users in database: ${userCount}`);
+    const result = await client.query('SELECT version()');
+    console.log('📊 PostgreSQL version:', result.rows[0].version);
 
-    // Test establishments
-    const establishmentCount = await prisma.establishment.count();
-    console.log(`🏪 Establishments in database: ${establishmentCount}`);
+    const tablesResult = await client.query(`
+      SELECT tablename FROM pg_tables 
+      WHERE schemaname = 'public'
+    `);
+    console.log('📋 Tables in database:', tablesResult.rows.map(r => r.tablename));
 
-    await prisma.$disconnect();
-    console.log('✅ Prisma disconnected successfully!');
+    await client.end();
+    console.log('✅ Disconnected successfully!');
 
     return NextResponse.json({
       success: true,
       message: 'Database connection successful!',
       data: {
-        userCount,
-        establishmentCount,
+        version: result.rows[0].version,
+        tables: tablesResult.rows.map(r => r.tablename),
         timestamp: new Date().toISOString()
       }
     });
 
   } catch (error) {
-    console.error('❌ Database error:', error);
+    console.error('❌ Database connection error:', error);
     return NextResponse.json({
       success: false,
       error: error.message,
       code: error.code,
+      host: process.env.DATABASE_URL?.split('@')[1]?.split(':')[0],
       timestamp: new Date().toISOString()
     }, { status: 500 });
   }
