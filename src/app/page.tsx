@@ -16,7 +16,11 @@ export default function Home() {
   }, [session, router]);
 
   if (status === "loading") {
-    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        Loading...
+      </div>
+    );
   }
 
   return (
@@ -25,7 +29,7 @@ export default function Home() {
         <h1 className="text-3xl font-bold text-gray-800 mb-4">
           Fidélisation PME
         </h1>
-        <p className="text-gray-600 mb-6">Scannez un QR code dans un point de vente pour accéder à l<p className="text-gray-600 mb-8">apos;app.</p><p className="text-gray-600 mb-8">Ou créez un compte pour commencer.</p>
+        <p className="text-gray-600 mb-6">
           Scannez vos tickets de caisse et accumulez des points de fidélité !
         </p>
         <div className="space-y-4">

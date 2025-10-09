@@ -131,8 +131,7 @@ export default function SignIn() {
             href="/auth/signup"
             className="text-indigo-600 hover:text-indigo-500"
           >
-            Pas de compte ? SPas de compte ? SPas de compte ?
-            S&apos;inscrireapos;inscrireapos;inscrire
+            Pas de compte ? S&apos;inscrire
           </Link>
         </div>
       </div>
