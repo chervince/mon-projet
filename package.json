@@ -4,14 +4,14 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "prisma generate "build": "next build --turbopack","build": "next build --turbopack", prisma db push --accept-data-loss "build": "next build --turbopack","build": "next build --turbopack", next build --turbopack",
-    "test-connection": "node test-connection.js",
+    "build": "prisma generate && prisma db push --accept-data-loss && next build --turbopack",
     "start": "next start",
     "lint": "eslint",
     "postinstall": "prisma generate",
     "type-check": "tsc --noEmit",
-    "test-db": "node test-db.js",
-    "prepare": "husky && prisma generate"
+    "prepare": "husky && prisma generate",
+    "test-connection": "node test-connection.js",
+    "test-db": "node test-db.js"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.11.0",
