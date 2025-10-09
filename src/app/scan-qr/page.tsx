@@ -27,6 +27,7 @@ export default function ScanQR() {
           "Permission caméra refusée. Veuillez autoriser  ll&apos;accèsapos;accès à la caméra."
         );
       }
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (err) {
       // Fallback for browsers that don't support permissions API
       setHasPermission(null);
@@ -69,6 +70,7 @@ export default function ScanQR() {
       );
 
       await qrScanner.start();
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (err) {
       console.error("Erreur lors du scan:", err);
       setError(
@@ -82,6 +84,7 @@ export default function ScanQR() {
     try {
       await navigator.mediaDevices.getUserMedia({ video: true });
       setHasPermission(true);
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (err) {
       setError("Impossible d'accéder à la caméra. Vérifiez vos permissions.");
     }
