@@ -9,6 +9,7 @@
     "lint": "eslint",
     "postinstall": "prisma generate",
     "type-check": "tsc --noEmit",
+    "test-db": "node test-db.js",
     "prepare": "husky && prisma generate"
   },
   "dependencies": {
