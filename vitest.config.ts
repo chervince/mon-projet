@@ -18,10 +18,12 @@ export default defineConfig({
         'src/app/layout.tsx',
         '**/*.d.ts'
       ],
-      lines: 80,
-      functions: 80,
-      branches: 75,
-      statements: 80
+      thresholds: {
+        lines: 80,
+        functions: 80,
+        branches: 75,
+        statements: 80
+      }
     }
   },
   resolve: {
