@@ -29,7 +29,7 @@ export default function SignIn() {
       } else {
         router.push("/dashboard");
       }
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (err) {
       setError("Une erreur est survenue");
     } finally {
@@ -62,7 +62,7 @@ export default function SignIn() {
             <input
               type="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={e => setEmail(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
               required
             />
@@ -75,7 +75,7 @@ export default function SignIn() {
             <input
               type="password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={e => setPassword(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
               required
             />
@@ -127,8 +127,12 @@ export default function SignIn() {
         </div>
 
         <div className="mt-6 text-center">
-          <Link href="/auth/signup" className="text-indigo-600 hover:text-indigo-500">
-            Pas de compte ? SPas de compte ? SPas de compte ? S'inscrireapos;inscrireapos;inscrire
+          <Link
+            href="/auth/signup"
+            className="text-indigo-600 hover:text-indigo-500"
+          >
+            Pas de compte ? SPas de compte ? SPas de compte ?
+            S&apos;inscrireapos;inscrireapos;inscrire
           </Link>
         </div>
       </div>

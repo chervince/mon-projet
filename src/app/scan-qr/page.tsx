@@ -17,13 +17,16 @@ export default function ScanQR() {
 
   const checkCameraPermission = async () => {
     try {
-      const result = await navigator.permissions.query({ name: "camera" as PermissionName });
+      const result = await navigator.permissions.query({
+        name: "camera" as PermissionName,
+      });
       setHasPermission(result.state === "granted");
 
       if (result.state === "denied") {
-        setError("Permission caméra refusée. Veuillez autoriser  ll'accèsapos;accès à la caméra.");
+        setError(
+          "Permission caméra refusée. Veuillez autoriser  ll&apos;accèsapos;accès à la caméra."
+        );
       }
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (err) {
       // Fallback for browsers that don't support permissions API
       setHasPermission(null);
@@ -39,18 +42,23 @@ export default function ScanQR() {
     try {
       const qrScanner = new QrScanner(
         videoRef.current,
-        async (result) => {
+        async result => {
           console.log("QR Code détecté:", result.data);
           qrScanner.stop();
 
           // Vérifier si c'est un QR code d'établissement valide
           if (result.data.startsWith("fidelisation://establishment/")) {
-            const establishmentId = result.data.replace("fidelisation://establishment/", "");
+            const establishmentId = result.data.replace(
+              "fidelisation://establishment/",
+              ""
+            );
             // Stocker l'établissement dans sessionStorage pour l'utiliser plus tard
             sessionStorage.setItem("establishmentId", establishmentId);
             router.push("/");
           } else {
-            setError("QR code non reconnu. Veuillez scanner un QR code d'établissement.");
+            setError(
+              "QR code non reconnu. Veuillez scanner un QR code d'établissement."
+            );
             setIsScanning(false);
           }
         },
@@ -61,10 +69,11 @@ export default function ScanQR() {
       );
 
       await qrScanner.start();
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (err) {
       console.error("Erreur lors du scan:", err);
-      setError("Erreur lors de lErreur lors de  ll'accèsapos;accèsapos;accès à la caméra. Veuillez réessayer.");
+      setError(
+        "Erreur lors de lErreur lors de  ll&apos;accèsapos;accèsapos;accès à la caméra. Veuillez réessayer."
+      );
       setIsScanning(false);
     }
   };
@@ -73,7 +82,6 @@ export default function ScanQR() {
     try {
       await navigator.mediaDevices.getUserMedia({ video: true });
       setHasPermission(true);
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (err) {
       setError("Impossible d'accéder à la caméra. Vérifiez vos permissions.");
     }
@@ -105,7 +113,8 @@ export default function ScanQR() {
           {hasPermission === false && (
             <div className="text-center">
               <p className="text-gray-600 mb-4">
-                LL'accès à la caméra est nécessaireapos;accès à la caméra est nécessaire pour scanner les QR codes.
+                L&apos;accès à la caméra est nécessaire pour scanner les QR
+                codes.
               </p>
               <button
                 onClick={requestPermission}
@@ -146,7 +155,7 @@ export default function ScanQR() {
             onClick={() => router.push("/")}
             className="text-gray-500 hover:text-gray-700"
           >
-            Retour à l'accueil
+            Retour à l&apos;accueil
           </button>
         </div>
       </div>

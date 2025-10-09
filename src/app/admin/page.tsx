@@ -67,11 +67,17 @@ export default function Admin() {
 
   const downloadQR = (establishment: Establishment) => {
     // Pour l'instant, on affiche juste l'URL du QR
-    alert(`QR Code URL: ${establishment.qrCode}\n\nUtilisez un générateur de QR code en ligne avec cette URL.`);
+    alert(
+      `QR Code URL: ${establishment.qrCode}\n\nUtilisez un générateur de QR code en ligne avec cette URL.`
+    );
   };
 
   if (status === "loading") {
-    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        Loading...
+      </div>
+    );
   }
 
   if (!session) {
@@ -98,12 +104,18 @@ export default function Admin() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Nom de lNom de ll'établissementapos;établissementapos;établissement
+                  Nom de lNom de
+                  ll&apos;établissementapos;établissementapos;établissement
                 </label>
                 <input
                   type="text"
                   value={newEstablishment.name}
-                  onChange={(e) => setNewEstablishment({ ...newEstablishment, name: e.target.value })}
+                  onChange={e =>
+                    setNewEstablishment({
+                      ...newEstablishment,
+                      name: e.target.value,
+                    })
+                  }
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
                   required
                 />
@@ -116,7 +128,12 @@ export default function Admin() {
                   type="number"
                   step="0.1"
                   value={newEstablishment.pointsPerEuro}
-                  onChange={(e) => setNewEstablishment({ ...newEstablishment, pointsPerEuro: parseFloat(e.target.value) })}
+                  onChange={e =>
+                    setNewEstablishment({
+                      ...newEstablishment,
+                      pointsPerEuro: parseFloat(e.target.value),
+                    })
+                  }
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
                   min="0.1"
                   required
@@ -128,7 +145,9 @@ export default function Admin() {
               disabled={loading}
               className="bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700 disabled:opacity-50"
             >
-              {loading ? "Création..." : "Créer ll'établissementapos;établissement"}
+              {loading
+                ? "Création..."
+                : "Créer ll&apos;établissementapos;établissement"}
             </button>
           </form>
         </div>
@@ -140,8 +159,11 @@ export default function Admin() {
             <p className="text-gray-600">Aucun établissement créé.</p>
           ) : (
             <div className="space-y-4">
-              {establishments.map((establishment) => (
-                <div key={establishment.id} className="border border-gray-200 rounded-lg p-4">
+              {establishments.map(establishment => (
+                <div
+                  key={establishment.id}
+                  className="border border-gray-200 rounded-lg p-4"
+                >
                   <div className="flex justify-between items-start">
                     <div>
                       <h3 className="font-semibold">{establishment.name}</h3>
@@ -149,7 +171,8 @@ export default function Admin() {
                         {establishment.pointsPerEuro} point(s) par euro
                       </p>
                       <p className="text-xs text-gray-500 mt-1">
-                        Créé le {new Date(establishment.createdAt).toLocaleDateString()}
+                        Créé le{" "}
+                        {new Date(establishment.createdAt).toLocaleDateString()}
                       </p>
                     </div>
                     <button
