@@ -1,6 +1,6 @@
 // Service Worker pour PWA de fidélisation
 
-const CACHE_NAME = 'fidelisation-pme-v1';
+const CACHE_NAME = 'fidelisation-pme-v2';
 const urlsToCache = [
   '/',
   '/manifest.json',
