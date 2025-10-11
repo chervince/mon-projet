@@ -16,39 +16,28 @@ export default function AdminLogin() {
     setLoading(true);
     setError("");
 
-    console.log("🚀 [CLIENT] Login attempt for:", email);
-
     try {
-      console.log("🔐 [CLIENT] Calling signIn...");
       const result = await signIn("credentials", {
         email,
         password,
         redirect: false,
       });
 
-      console.log("📥 [CLIENT] signIn result:", result);
-
       if (result?.error) {
-        console.error("❌ [CLIENT] SignIn error:", result.error);
         setError("Email ou mot de passe incorrect");
       } else if (result?.ok) {
-        console.log("✅ [CLIENT] SignIn successful, checking role...");
         // Vérifier si c'est un admin
         const response = await fetch("/api/admin/check-role");
         const data = await response.json();
 
-        console.log("👤 [CLIENT] Role check result:", data);
-
         if (data.role === "admin") {
-          console.log("✅ [CLIENT] Admin confirmed, redirecting...");
           router.push("/admin");
         } else {
-          console.error("❌ [CLIENT] Not an admin:", data.role);
           setError("Accès non autorisé - Compte admin requis");
         }
       }
     } catch (error) {
-      console.error("❌ [CLIENT] Login error:", error);
+      console.error("Login error:", error);
       setError("Erreur de connexion");
     } finally {
       setLoading(false);
