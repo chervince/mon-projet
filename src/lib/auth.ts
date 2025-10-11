@@ -8,6 +8,12 @@ const prisma = new PrismaClient();
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
+  debug: true, // Active les logs détaillés
+  logger: {
+    error: error => console.error("❌ [NEXTAUTH ERROR]", error),
+    warn: message => console.warn("⚠️  [NEXTAUTH WARN]", message),
+    debug: message => console.log("🐛 [NEXTAUTH DEBUG]", message),
+  },
   providers: [
     Credentials({
       name: "credentials",
