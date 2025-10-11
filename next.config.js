@@ -1,17 +1,21 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-  typescript: {
-    ignoreBuildErrors: true,
-  },
-  output: 'standalone',
+  reactStrictMode: true,
   images: {
     unoptimized: true,
   },
-  generateBuildId: async () => {
-    return 'build-' + Date.now()
+  experimental: {
+    optimizePackageImports: ['@prisma/client'],
+  },
+  // Workaround for Next.js 15.5.4 Html import error
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+      };
+    }
+    return config;
   },
 }
 

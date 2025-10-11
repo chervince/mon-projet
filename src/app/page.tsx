@@ -7,7 +7,7 @@ interface BeforeInstallPromptEvent extends Event {
   userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
 }
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense, useCallback } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
@@ -20,7 +20,7 @@ interface Merchant {
   address?: string;
 }
 
-export default function HomePage() {
+function HomePageContent() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -29,18 +29,30 @@ export default function HomePage() {
   const [deferredPrompt, setDeferredPrompt] =
     useState<BeforeInstallPromptEvent | null>(null);
 
+  const fetchMerchant = useCallback(async (merchantId: string) => {
+    try {
+      const response = await fetch(`/api/merchants/${merchantId}`);
+      if (response.ok) {
+        const data = await response.json();
+        setMerchant(data.merchant);
+      }
+    } catch (error) {
+      console.error("Error fetching merchant:", error);
+    }
+  }, []);
+
   // Détecter le marchand depuis l'URL (QR scan)
   useEffect(() => {
     const merchantId = searchParams.get("merchant");
     if (merchantId) {
       fetchMerchant(merchantId);
     }
-  }, [searchParams]);
+  }, [searchParams, fetchMerchant]);
 
   // Détecter le prompt d'installation PWA
   useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handleBeforeInstallPrompt = (e: any) => {
-      // eslint-disable-line @typescript-eslint/no-explicit-any
       e.preventDefault();
       setDeferredPrompt(e);
       setShowInstallPrompt(true);
@@ -55,18 +67,6 @@ export default function HomePage() {
       );
     };
   }, []);
-
-  const fetchMerchant = async (merchantId: string) => {
-    try {
-      const response = await fetch(`/api/merchants/${merchantId}`);
-      if (response.ok) {
-        const data = await response.json();
-        setMerchant(data.merchant);
-      }
-    } catch (error) {
-      console.error("Error fetching merchant:", error);
-    }
-  };
 
   const handleInstallClick = async () => {
     if (deferredPrompt) {
@@ -307,4 +307,19 @@ export default function HomePage() {
     </div>
   );
 }
+
+export default function HomePage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 via-white to-purple-50">
+          <div className="text-lg">Chargement...</div>
+        </div>
+      }
+    >
+      <HomePageContent />
+    </Suspense>
+  );
+}
+
 export const dynamic = "force-dynamic";

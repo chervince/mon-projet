@@ -17,6 +17,10 @@ export const metadata: Metadata = {
   title: "Fidélisation PME",
   description: "Application de fidélisation pour petits commerces et PME",
   manifest: "/manifest.json?v=2",
+  themeColor: "#000000",
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({
@@ -25,10 +29,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <link rel="manifest" href="/manifest.json?v=2" />
-      <meta name="theme-color" content="#000000" />
-      <link rel="icon" href="/favicon.ico" />
+    <html lang="fr">
       <body
         suppressHydrationWarning={true}
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}

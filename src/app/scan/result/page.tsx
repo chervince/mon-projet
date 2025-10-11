@@ -1,7 +1,7 @@
 /* eslint-disable react/no-unescaped-entities */
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import BottomNav from "@/components/navigation/bottom-nav";
 
@@ -22,7 +22,7 @@ interface ScanResult {
   error?: string;
 }
 
-export default function ScanResultPage() {
+function ScanResultContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [result, setResult] = useState<ScanResult | null>(null);
@@ -315,5 +315,19 @@ export default function ScanResultPage() {
       {/* Navigation Bottom */}
       <BottomNav />
     </div>
+  );
+}
+
+export default function ScanResultPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="text-lg">Chargement...</div>
+        </div>
+      }
+    >
+      <ScanResultContent />
+    </Suspense>
   );
 }
