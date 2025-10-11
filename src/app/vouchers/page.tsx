@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 "use client";
 
 import { useEffect, useState } from "react";
@@ -74,15 +75,24 @@ export default function VouchersPage() {
         {vouchers.length === 0 ? (
           <div className="bg-white rounded-2xl shadow-lg p-8 text-center">
             <div className="mx-auto w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-              <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+              <svg
+                className="w-8 h-8 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
+                />
               </svg>
             </div>
-            <p className="text-gray-600 mb-4">
-              Aucun bon disponible
-            </p>
+            <p className="text-gray-600 mb-4">Aucun bon disponible</p>
             <p className="text-sm text-gray-500 mb-6">
-              Accumulez des crédits en scannant vos tickets pour obtenir des bons d'achat
+              Accumulez des crédits en scannant vos tickets pour obtenir des
+              bons d'achat
             </p>
             <button
               onClick={() => router.push("/scan")}
@@ -96,14 +106,16 @@ export default function VouchersPage() {
             {/* Statistiques */}
             <div className="bg-white rounded-lg shadow p-4">
               <div className="text-center">
-                <div className="text-2xl font-bold text-indigo-600">{vouchers.length}</div>
+                <div className="text-2xl font-bold text-indigo-600">
+                  {vouchers.length}
+                </div>
                 <div className="text-sm text-gray-600">Bon(s) actif(s)</div>
               </div>
             </div>
 
             {/* Liste des bons */}
             <div className="space-y-4">
-              {vouchers.map((voucher) => (
+              {vouchers.map(voucher => (
                 <div
                   key={voucher.id}
                   className="bg-white rounded-2xl shadow-lg p-6"
@@ -116,7 +128,8 @@ export default function VouchersPage() {
                       {voucher.amount.toLocaleString()} XPF
                     </div>
                     <p className="text-sm text-gray-600">
-                      Généré le {new Date(voucher.createdAt).toLocaleDateString()}
+                      Généré le{" "}
+                      {new Date(voucher.createdAt).toLocaleDateString()}
                     </p>
                   </div>
 
@@ -124,8 +137,18 @@ export default function VouchersPage() {
                   <div className="flex justify-center mb-6">
                     <div className="w-48 h-48 bg-white border-2 border-gray-200 rounded-lg flex items-center justify-center">
                       <div className="text-center">
-                        <svg className="w-16 h-16 text-gray-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M12 15h4.01M12 21h4.01M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M12 15h4.01M12 21h4.01M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M12 15h4.01M12 21h4.01" />
+                        <svg
+                          className="w-16 h-16 text-gray-400 mx-auto mb-2"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M12 15h4.01M12 21h4.01M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M12 15h4.01M12 21h4.01M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M12 15h4.01M12 21h4.01"
+                          />
                         </svg>
                         <p className="text-xs text-gray-500">QR Code</p>
                         <p className="text-xs text-gray-400 mt-1">Simulé</p>
@@ -136,7 +159,9 @@ export default function VouchersPage() {
                   {/* Code marchand */}
                   <div className="bg-gray-50 rounded-lg p-4 mb-4">
                     <div className="text-center">
-                      <p className="text-sm text-gray-600 mb-2">Code marchand</p>
+                      <p className="text-sm text-gray-600 mb-2">
+                        Code marchand
+                      </p>
                       <div className="text-2xl font-mono font-bold text-gray-900 tracking-wider">
                         {voucher.merchantCode}
                       </div>
@@ -146,10 +171,13 @@ export default function VouchersPage() {
                   {/* Instructions */}
                   <div className="text-center text-sm text-gray-600 space-y-2">
                     <p>
-                      <strong>En caisse :</strong> Montrez ce QR code ou saisissez le code marchand
+                      <strong>En caisse :</strong> Montrez ce QR code ou
+                      saisissez le code marchand
                     </p>
                     <p>
-                      <strong>Remise :</strong> {voucher.amount.toLocaleString()} XPF à appliquer sur votre achat
+                      <strong>Remise :</strong>{" "}
+                      {voucher.amount.toLocaleString()} XPF à appliquer sur
+                      votre achat
                     </p>
                     <p className="text-xs text-gray-500">
                       Bon utilisable une seule fois chez {voucher.merchantName}

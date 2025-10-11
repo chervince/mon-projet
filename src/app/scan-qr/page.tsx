@@ -27,9 +27,9 @@ export default function ScanQR() {
           "Permission caméra refusée. Veuillez autoriser  ll&apos;accèsapos;accès à la caméra."
         );
       }
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (err) {
-      // Fallback for browsers that don't support permissions API
+      // Fallback for browsers that don&apos;t support permissions API
       setHasPermission(null);
     }
   };
@@ -47,18 +47,18 @@ export default function ScanQR() {
           console.log("QR Code détecté:", result.data);
           qrScanner.stop();
 
-          // Vérifier si c'est un QR code d'établissement valide
+          // Vérifier si c&apos;est un QR code d&apos;établissement valide
           if (result.data.startsWith("fidelisation://establishment/")) {
             const establishmentId = result.data.replace(
               "fidelisation://establishment/",
               ""
             );
-            // Stocker l'établissement dans sessionStorage pour l'utiliser plus tard
+            // Stocker l&apos;établissement dans sessionStorage pour l&apos;utiliser plus tard
             sessionStorage.setItem("establishmentId", establishmentId);
             router.push("/");
           } else {
             setError(
-              "QR code non reconnu. Veuillez scanner un QR code d'établissement."
+              "QR code non reconnu. Veuillez scanner un QR code d&apos;établissement."
             );
             setIsScanning(false);
           }
@@ -70,7 +70,6 @@ export default function ScanQR() {
       );
 
       await qrScanner.start();
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (err) {
       console.error("Erreur lors du scan:", err);
       setError(
@@ -84,9 +83,11 @@ export default function ScanQR() {
     try {
       await navigator.mediaDevices.getUserMedia({ video: true });
       setHasPermission(true);
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (err) {
-      setError("Impossible d'accéder à la caméra. Vérifiez vos permissions.");
+      setError(
+        "Impossible d&apos;accéder à la caméra. Vérifiez vos permissions."
+      );
     }
   };
 

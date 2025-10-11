@@ -1,3 +1,4 @@
+import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { PrismaClient } from "@prisma/client";
 
@@ -52,7 +53,7 @@ export async function GET() {
       totalCreditsDistributed: totalCredits._sum.amount || 0,
       totalVouchersGenerated: totalVouchers,
       totalScans: totalScans,
-      recentScans: recentScans.map((scan) => ({
+      recentScans: recentScans.map(scan => ({
         id: scan.id,
         userName: scan.user.name || scan.user.email,
         merchantName: scan.merchant.name,

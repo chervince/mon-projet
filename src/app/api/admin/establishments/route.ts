@@ -11,7 +11,10 @@ const createMerchantSchema = z.object({
   creditPercentage: z.number().min(1).max(20).default(10.0),
   threshold: z.number().min(500).default(2000.0),
   validityMonths: z.number().min(3).default(6),
-  merchantCode: z.string().length(4).regex(/^[A-Z0-9]{4}$/),
+  merchantCode: z
+    .string()
+    .length(4)
+    .regex(/^[A-Z0-9]{4}$/),
 });
 
 export async function POST(request: NextRequest) {
@@ -55,7 +58,7 @@ export async function POST(request: NextRequest) {
     console.error("Error creating merchant:", error);
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: "Données invalides", details: error.errors },
+        { error: "Données invalides", details: error.issues },
         { status: 400 }
       );
     }

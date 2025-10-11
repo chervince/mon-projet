@@ -1,5 +1,5 @@
 // Test de connexion direct sans Prisma
-const { Client } = require('pg');
+import { Client } from 'pg';
 
 const client = new Client({
   connectionString: process.env.DATABASE_URL,

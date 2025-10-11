@@ -1,10 +1,10 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const session = await auth();
     if (!session?.user?.email) {
@@ -36,7 +36,7 @@ export async function GET(request: NextRequest) {
 
     // Enrichir avec les infos marchands
     const enrichedCredits = await Promise.all(
-      credits.map(async (credit) => {
+      credits.map(async credit => {
         const merchant = await prisma.merchant.findUnique({
           where: { id: credit.merchantId },
           select: {

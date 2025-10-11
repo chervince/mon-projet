@@ -26,7 +26,7 @@ export default function AdminLogin() {
       if (result?.error) {
         setError("Email ou mot de passe incorrect");
       } else if (result?.ok) {
-        // Vérifier si c'est un admin
+        // Vérifier si c&apos;est un admin
         const response = await fetch("/api/admin/check-role");
         const data = await response.json();
 
@@ -77,7 +77,7 @@ export default function AdminLogin() {
                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 placeholder="Email administrateur"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={e => setEmail(e.target.value)}
               />
             </div>
             <div>
@@ -93,7 +93,7 @@ export default function AdminLogin() {
                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 placeholder="Mot de passe"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={e => setPassword(e.target.value)}
               />
             </div>
           </div>

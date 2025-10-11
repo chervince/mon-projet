@@ -1,6 +1,6 @@
+/* eslint-disable react/no-unescaped-entities */
 "use client";
-
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import BottomNav from "@/components/navigation/bottom-nav";
@@ -27,19 +27,23 @@ export default function ScanPage() {
   const initializeCamera = async () => {
     try {
       // Vérifier les permissions
-      const permission = await navigator.permissions.query({ name: 'camera' as PermissionName });
-      if (permission.state === 'denied') {
-        setError("Permission caméra refusée. Veuillez autoriser l'accès à la caméra dans les paramètres de votre navigateur.");
+      const permission = await navigator.permissions.query({
+        name: "camera" as PermissionName,
+      });
+      if (permission.state === "denied") {
+        setError(
+          "Permission caméra refusée. Veuillez autoriser l'accès à la caméra dans les paramètres de votre navigateur."
+        );
         return;
       }
 
       // Accéder à la caméra
       const mediaStream = await navigator.mediaDevices.getUserMedia({
         video: {
-          facingMode: 'environment', // Caméra arrière
+          facingMode: "environment", // Caméra arrière
           width: { ideal: 1280 },
-          height: { ideal: 720 }
-        }
+          height: { ideal: 720 },
+        },
       });
 
       setStream(mediaStream);
@@ -51,7 +55,9 @@ export default function ScanPage() {
       }
     } catch (err) {
       console.error("Erreur caméra:", err);
-      setError("Impossible d'accéder à la caméra. Vérifiez que votre appareil en possède une et que les permissions sont accordées.");
+      setError(
+        "Impossible d'accéder à la caméra. Vérifiez que votre appareil en possède une et que les permissions sont accordées."
+      );
     }
   };
 
@@ -60,7 +66,7 @@ export default function ScanPage() {
 
     const video = videoRef.current;
     const canvas = canvasRef.current;
-    const context = canvas.getContext('2d');
+    const context = canvas.getContext("2d");
 
     if (!context) return;
 
@@ -72,11 +78,15 @@ export default function ScanPage() {
     context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
     // Convertir en blob
-    canvas.toBlob(async (blob) => {
-      if (blob) {
-        await processTicket(blob);
-      }
-    }, 'image/jpeg', 0.9);
+    canvas.toBlob(
+      async blob => {
+        if (blob) {
+          await processTicket(blob);
+        }
+      },
+      "image/jpeg",
+      0.9
+    );
   };
 
   const processTicket = async (imageBlob: Blob) => {
@@ -85,10 +95,10 @@ export default function ScanPage() {
 
     try {
       const formData = new FormData();
-      formData.append('ticket', imageBlob, 'ticket.jpg');
+      formData.append("ticket", imageBlob, "ticket.jpg");
 
-      const response = await fetch('/api/scan/process', {
-        method: 'POST',
+      const response = await fetch("/api/scan/process", {
+        method: "POST",
         body: formData,
       });
 
@@ -96,7 +106,9 @@ export default function ScanPage() {
 
       if (response.ok) {
         // Rediriger vers page de résultats avec les données
-        router.push(`/scan/result?data=${encodeURIComponent(JSON.stringify(result))}`);
+        router.push(
+          `/scan/result?data=${encodeURIComponent(JSON.stringify(result))}`
+        );
       } else {
         setError(result.error || "Erreur lors du traitement du ticket");
       }
@@ -108,18 +120,18 @@ export default function ScanPage() {
     }
   };
 
-  const stopCamera = () => {
+  const stopCamera = useCallback(() => {
     if (stream) {
       stream.getTracks().forEach(track => track.stop());
       setStream(null);
     }
-  };
+  }, [stream]);
 
   useEffect(() => {
     return () => {
       stopCamera();
     };
-  }, []);
+  }, [stopCamera]);
 
   if (status === "loading") {
     return (
@@ -142,8 +154,18 @@ export default function ScanPage() {
             onClick={() => router.back()}
             className="p-2 hover:bg-gray-800 rounded-full transition-colors"
           >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 19l-7-7 7-7"
+              />
             </svg>
           </button>
           <h1 className="text-lg font-semibold">Scanner un ticket</h1>
@@ -157,13 +179,24 @@ export default function ScanPage() {
           <div className="h-full flex items-center justify-center p-8">
             <div className="text-center text-white">
               <div className="mx-auto w-16 h-16 bg-gray-700 rounded-full flex items-center justify-center mb-4">
-                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                <svg
+                  className="w-8 h-8"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
+                  />
                 </svg>
               </div>
               <h2 className="text-xl font-semibold mb-2">Accès à la caméra</h2>
               <p className="text-gray-300 mb-6">
-                Nous avons besoin d'accéder à votre caméra pour scanner les tickets de caisse.
+                Nous avons besoin d'accéder à votre caméra pour scanner les
+                tickets de caisse.
               </p>
               <button
                 onClick={initializeCamera}
@@ -182,7 +215,7 @@ export default function ScanPage() {
               playsInline
               muted
               className="w-full h-full object-cover"
-              style={{ transform: 'scaleX(-1)' }} // Miroir pour caméra frontale
+              style={{ transform: "scaleX(-1)" }} // Miroir pour caméra frontale
             />
 
             {/* Overlay de ciblage */}
@@ -226,8 +259,18 @@ export default function ScanPage() {
       {error && (
         <div className="absolute bottom-32 left-4 right-4 bg-red-600 text-white p-4 rounded-lg">
           <div className="flex items-center">
-            <svg className="w-5 h-5 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
+            <svg
+              className="w-5 h-5 mr-2 flex-shrink-0"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"
+              />
             </svg>
             <p className="text-sm">{error}</p>
           </div>

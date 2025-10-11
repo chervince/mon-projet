@@ -1,7 +1,8 @@
-;
+/* eslint-disable react/no-unescaped-entities */
+"use client";
 import Image from "next/image";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
@@ -60,9 +61,10 @@ export default function Admin() {
     } else {
       checkAdminRole();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session, status, router]);
 
-  const checkAdminRole = async () => {
+  const checkAdminRole = useCallback(async () => {
     try {
       const response = await fetch("/api/admin/check-role");
       const data = await response.json();
@@ -77,7 +79,7 @@ export default function Admin() {
       console.error("Error checking role:", error);
       router.push("/admin/login");
     }
-  };
+  }, [router]);
 
   const fetchStats = async () => {
     try {
@@ -178,23 +180,33 @@ export default function Admin() {
         {stats && (
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
             <div className="bg-white rounded-lg shadow p-4">
-              <div className="text-2xl font-bold text-blue-600">{stats.totalUsers}</div>
+              <div className="text-2xl font-bold text-blue-600">
+                {stats.totalUsers}
+              </div>
               <div className="text-sm text-gray-600">Utilisateurs</div>
             </div>
             <div className="bg-white rounded-lg shadow p-4">
-              <div className="text-2xl font-bold text-green-600">{stats.totalMerchants}</div>
+              <div className="text-2xl font-bold text-green-600">
+                {stats.totalMerchants}
+              </div>
               <div className="text-sm text-gray-600">Marchands</div>
             </div>
             <div className="bg-white rounded-lg shadow p-4">
-              <div className="text-2xl font-bold text-purple-600">{stats.totalCreditsDistributed.toLocaleString()} XPF</div>
+              <div className="text-2xl font-bold text-purple-600">
+                {stats.totalCreditsDistributed.toLocaleString()} XPF
+              </div>
               <div className="text-sm text-gray-600">Crédits distribués</div>
             </div>
             <div className="bg-white rounded-lg shadow p-4">
-              <div className="text-2xl font-bold text-orange-600">{stats.totalVouchersGenerated}</div>
+              <div className="text-2xl font-bold text-orange-600">
+                {stats.totalVouchersGenerated}
+              </div>
               <div className="text-sm text-gray-600">Bons générés</div>
             </div>
             <div className="bg-white rounded-lg shadow p-4">
-              <div className="text-2xl font-bold text-red-600">{stats.totalScans}</div>
+              <div className="text-2xl font-bold text-red-600">
+                {stats.totalScans}
+              </div>
               <div className="text-sm text-gray-600">Scans totaux</div>
             </div>
           </div>
@@ -205,16 +217,22 @@ export default function Admin() {
           <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
             <h2 className="text-xl font-semibold mb-4">Activité récente</h2>
             <div className="space-y-3">
-              {stats.recentScans.map((scan) => (
-                <div key={scan.id} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+              {stats.recentScans.map(scan => (
+                <div
+                  key={scan.id}
+                  className="flex justify-between items-center p-3 bg-gray-50 rounded-lg"
+                >
                   <div>
                     <div className="font-medium">{scan.userName}</div>
                     <div className="text-sm text-gray-600">
-                      {scan.merchantName} - {scan.ticketAmount.toLocaleString()} XPF
+                      {scan.merchantName} - {scan.ticketAmount.toLocaleString()}{" "}
+                      XPF
                     </div>
                   </div>
                   <div className="text-right">
-                    <div className="font-semibold text-green-600">+{scan.creditsEarned.toLocaleString()} XPF</div>
+                    <div className="font-semibold text-green-600">
+                      +{scan.creditsEarned.toLocaleString()} XPF
+                    </div>
                     <div className="text-xs text-gray-500">
                       {new Date(scan.timestamp).toLocaleString()}
                     </div>
@@ -243,7 +261,7 @@ export default function Admin() {
                   <input
                     type="text"
                     value={newMerchant.name}
-                    onChange={(e) =>
+                    onChange={e =>
                       setNewMerchant({
                         ...newMerchant,
                         name: e.target.value,
@@ -261,7 +279,7 @@ export default function Admin() {
                     <input
                       type="text"
                       value={newMerchant.merchantCode}
-                      onChange={(e) =>
+                      onChange={e =>
                         setNewMerchant({
                           ...newMerchant,
                           merchantCode: e.target.value.toUpperCase(),
@@ -287,7 +305,7 @@ export default function Admin() {
                   <input
                     type="text"
                     value={newMerchant.address}
-                    onChange={(e) =>
+                    onChange={e =>
                       setNewMerchant({
                         ...newMerchant,
                         address: e.target.value,
@@ -303,7 +321,7 @@ export default function Admin() {
                   <input
                     type="url"
                     value={newMerchant.logo}
-                    onChange={(e) =>
+                    onChange={e =>
                       setNewMerchant({
                         ...newMerchant,
                         logo: e.target.value,
@@ -323,7 +341,7 @@ export default function Admin() {
                       min="1"
                       max="20"
                       value={newMerchant.creditPercentage}
-                      onChange={(e) =>
+                      onChange={e =>
                         setNewMerchant({
                           ...newMerchant,
                           creditPercentage: parseFloat(e.target.value),
@@ -341,7 +359,7 @@ export default function Admin() {
                       min="500"
                       step="100"
                       value={newMerchant.threshold}
-                      onChange={(e) =>
+                      onChange={e =>
                         setNewMerchant({
                           ...newMerchant,
                           threshold: parseFloat(e.target.value),
@@ -358,7 +376,7 @@ export default function Admin() {
                       type="number"
                       min="3"
                       value={newMerchant.validityMonths}
-                      onChange={(e) =>
+                      onChange={e =>
                         setNewMerchant({
                           ...newMerchant,
                           validityMonths: parseInt(e.target.value),
@@ -381,12 +399,14 @@ export default function Admin() {
 
           {/* Liste des marchands */}
           <div className="bg-white rounded-2xl shadow-lg p-6">
-            <h2 className="text-xl font-semibold mb-4">Marchands ({merchants.length})</h2>
+            <h2 className="text-xl font-semibold mb-4">
+              Marchands ({merchants.length})
+            </h2>
             {merchants.length === 0 ? (
               <p className="text-gray-600">Aucun marchand créé.</p>
             ) : (
               <div className="space-y-4 max-h-96 overflow-y-auto">
-                {merchants.map((merchant) => (
+                {merchants.map(merchant => (
                   <div
                     key={merchant.id}
                     className="border border-gray-200 rounded-lg p-4"
@@ -404,26 +424,35 @@ export default function Admin() {
                             />
                           )}
                           <div>
-                            <h3 className="font-semibold text-lg">{merchant.name}</h3>
-                            <p className="text-sm text-gray-600">{merchant.address}</p>
+                            <h3 className="font-semibold text-lg">
+                              {merchant.name}
+                            </h3>
+                            <p className="text-sm text-gray-600">
+                              {merchant.address}
+                            </p>
                           </div>
                         </div>
                         <div className="grid grid-cols-2 gap-4 text-sm">
                           <div>
-                            <span className="font-medium">Code:</span> {merchant.merchantCode}
+                            <span className="font-medium">Code:</span>{" "}
+                            {merchant.merchantCode}
                           </div>
                           <div>
-                            <span className="font-medium">% Crédits:</span> {merchant.creditPercentage}%
+                            <span className="font-medium">% Crédits:</span>{" "}
+                            {merchant.creditPercentage}%
                           </div>
                           <div>
-                            <span className="font-medium">Seuil:</span> {merchant.threshold} XPF
+                            <span className="font-medium">Seuil:</span>{" "}
+                            {merchant.threshold} XPF
                           </div>
                           <div>
-                            <span className="font-medium">Validité:</span> {merchant.validityMonths} mois
+                            <span className="font-medium">Validité:</span>{" "}
+                            {merchant.validityMonths} mois
                           </div>
                         </div>
                         <p className="text-xs text-gray-500 mt-2">
-                          Créé le {new Date(merchant.createdAt).toLocaleDateString()}
+                          Créé le{" "}
+                          {new Date(merchant.createdAt).toLocaleDateString()}
                         </p>
                       </div>
                       <button
@@ -443,3 +472,4 @@ export default function Admin() {
     </div>
   );
 }
+export const dynamic = "force-dynamic";
