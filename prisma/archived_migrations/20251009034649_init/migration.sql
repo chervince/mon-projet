@@ -1,3 +1,10 @@
+-- ARCHIVED: This is the original migration from project initialization
+-- It has been replaced by 20251012090741_baseline which reflects the current database schema
+-- This file is kept for historical reference only
+
+-- Original migration content below:
+-- =====================================
+
 -- CreateTable
 CREATE TABLE "users" (
     "id" TEXT NOT NULL,
