@@ -8,7 +8,7 @@ generator client {
   provider = "prisma-client-js"
 }
 
-// Modèles de base
+// Modèles de base NextAuth
 model User {
   id            String    @id @default(cuid())
   email         String    @unique
@@ -17,11 +17,14 @@ model User {
   image         String?
   password      String?
   pointsTotal   Int       @default(0)
+  role          String    @default("user") // "user" or "admin"
   createdAt     DateTime  @default(now()) @map("created_at")
   updatedAt     DateTime  @updatedAt @map("updated_at")
 
   accounts Account[]
-  transactions Transaction[]
+  credits  Credit[]
+  vouchers Voucher[]
+  scanLogs ScanLog[]
   sessions Session[]
 
   @@map("users")
@@ -67,30 +70,69 @@ model VerificationToken {
   @@map("verification_tokens")
 }
 
-model Establishment {
-  id           String @id @default(cuid())
-  name         String @unique
-  qrCode       String @unique
-  pointsPerEuro Float @default(1.0)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+// Nouveaux modèles pour l'app fidélisation
+model Merchant {
+  id                String @id @default(cuid())
+  name              String
+  logo              String?
+  address           String?
+  creditPercentage  Float @default(10.0) // % crédits sur montant ticket (1-20%)
+  threshold         Float @default(2000.0) // seuil trigger bon en XPF (≥500)
+  validityMonths    Int @default(6) // validité crédits (≥3 mois)
+  merchantCode      String @unique // code 4 caractères unique
+  qrCode            String @unique // QR onboarding
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 
-  transactions Transaction[]
+  credits   Credit[]
+  vouchers  Voucher[]
+  scanLogs ScanLog[]
 
-  @@map("establishments")
+  @@map("merchants")
 }
 
-model Transaction {
-  id             String @id @default(cuid())
-  userId         String
-  establishmentId String
-  amount         Float
-  pointsEarned   Int
-  ticketImage    String?
-  createdAt      DateTime @default(now())
+model Credit {
+  id         String @id @default(cuid())
+  userId     String
+  merchantId String
+  amount     Float // montant crédits XPF
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
 
-  user           User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  establishment  Establishment @relation(fields: [establishmentId], references: [id])
+  user     User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  merchant Merchant @relation(fields: [merchantId], references: [id], onDelete: Cascade)
 
-  @@map("transactions")
+  @@map("credits")
+}
+
+model Voucher {
+  id           String @id @default(cuid())
+  userId       String
+  merchantId   String
+  amount       Float // valeur bon XPF (égale au seuil)
+  qrCode       String @unique // QR unique du bon
+  merchantCode String // code sous QR (4 caractères)
+  isUsed       Boolean @default(false)
+  usedAt       DateTime?
+  createdAt    DateTime @default(now())
+
+  user     User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  merchant Merchant @relation(fields: [merchantId], references: [id], onDelete: Cascade)
+
+  @@map("vouchers")
+}
+
+model ScanLog {
+  id            String @id @default(cuid())
+  userId        String
+  merchantId    String
+  ticketAmount  Float // montant ticket scanné XPF
+  creditsEarned Float // crédits attribués
+  timestamp     DateTime @default(now())
+  ip            String? // IP pour logs
+
+  user     User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  merchant Merchant @relation(fields: [merchantId], references: [id], onDelete: Cascade)
+
+  @@map("scan_logs")
 }
