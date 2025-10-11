@@ -3,7 +3,7 @@
 import Image from "next/image";
 
 import { useEffect, useState, useCallback } from "react";
-import { useSession } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 interface Merchant {
@@ -155,6 +155,10 @@ export default function Admin() {
     );
   };
 
+  const handleLogout = async () => {
+    await signOut({ callbackUrl: "/admin/login" });
+  };
+
   if (status === "loading" || !isAdmin) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -168,12 +172,20 @@ export default function Admin() {
       <div className="max-w-6xl mx-auto">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold text-gray-800">Administration</h1>
-          <button
-            onClick={() => router.push("/dashboard")}
-            className="bg-gray-600 text-white py-2 px-4 rounded-lg hover:bg-gray-700"
-          >
-            Retour au dashboard
-          </button>
+          <div className="flex gap-3">
+            <button
+              onClick={() => router.push("/dashboard")}
+              className="bg-gray-600 text-white py-2 px-4 rounded-lg hover:bg-gray-700"
+            >
+              Dashboard
+            </button>
+            <button
+              onClick={handleLogout}
+              className="bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700"
+            >
+              Déconnexion
+            </button>
+          </div>
         </div>
 
         {/* Statistiques globales */}

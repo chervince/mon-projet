@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useSession } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import BottomNav from "@/components/navigation/bottom-nav";
@@ -59,14 +59,27 @@ export default function Dashboard() {
     .sort((a, b) => b.totalCredits - a.totalCredits)
     .slice(0, 3);
 
+  const handleLogout = async () => {
+    await signOut({ callbackUrl: "/" });
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 pb-20">
       {/* Header */}
       <div className="bg-white shadow-sm border-b px-4 py-6">
         <div className="max-w-md mx-auto">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">
-            Bonjour {session.user?.name || "Utilisateur"}
-          </h1>
+          <div className="flex justify-between items-start mb-2">
+            <h1 className="text-2xl font-bold text-gray-900">
+              Bonjour {session.user?.name || "Utilisateur"}
+            </h1>
+            <button
+              onClick={handleLogout}
+              className="text-sm text-red-600 hover:text-red-700 font-medium px-3 py-1 rounded-lg hover:bg-red-50 transition-colors"
+              title="Se déconnecter"
+            >
+              Déconnexion
+            </button>
+          </div>
           <p className="text-gray-600">
             Découvrez vos crédits et commencez à scanner !
           </p>
@@ -84,13 +97,21 @@ export default function Dashboard() {
           {topCredits.length === 0 ? (
             <div className="text-center py-8">
               <div className="mx-auto w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-                <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                <svg
+                  className="w-8 h-8 text-gray-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
                 </svg>
               </div>
-              <p className="text-gray-600 mb-4">
-                Aucun crédit pour le moment
-              </p>
+              <p className="text-gray-600 mb-4">Aucun crédit pour le moment</p>
               <p className="text-sm text-gray-500">
                 Scannez votre premier ticket pour commencer !
               </p>
@@ -104,8 +125,8 @@ export default function Dashboard() {
                     index === 0
                       ? "bg-gradient-to-r from-yellow-50 to-yellow-100 border-2 border-yellow-200"
                       : index === 1
-                      ? "bg-gradient-to-r from-gray-50 to-gray-100 border-2 border-gray-200"
-                      : "bg-gradient-to-r from-orange-50 to-orange-100 border-2 border-orange-200"
+                        ? "bg-gradient-to-r from-gray-50 to-gray-100 border-2 border-gray-200"
+                        : "bg-gradient-to-r from-orange-50 to-orange-100 border-2 border-orange-200"
                   }`}
                 >
                   <div className="flex-shrink-0 mr-4">
@@ -130,13 +151,15 @@ export default function Dashboard() {
                       <h3 className="font-semibold text-gray-900">
                         {credit.merchantName}
                       </h3>
-                      <div className={`px-2 py-1 rounded-full text-xs font-medium ${
-                        index === 0
-                          ? "bg-yellow-200 text-yellow-800"
-                          : index === 1
-                          ? "bg-gray-200 text-gray-800"
-                          : "bg-orange-200 text-orange-800"
-                      }`}>
+                      <div
+                        className={`px-2 py-1 rounded-full text-xs font-medium ${
+                          index === 0
+                            ? "bg-yellow-200 text-yellow-800"
+                            : index === 1
+                              ? "bg-gray-200 text-gray-800"
+                              : "bg-orange-200 text-orange-800"
+                        }`}
+                      >
                         #{index + 1}
                       </div>
                     </div>
@@ -154,8 +177,18 @@ export default function Dashboard() {
         <div className="bg-white rounded-2xl shadow-lg p-6">
           <div className="text-center">
             <div className="mx-auto w-20 h-20 bg-indigo-100 rounded-full flex items-center justify-center mb-4">
-              <svg className="w-10 h-10 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M12 15h4.01M12 21h4.01M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M12 15h4.01M12 21h4.01M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M12 15h4.01M12 21h4.01" />
+              <svg
+                className="w-10 h-10 text-indigo-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M12 15h4.01M12 21h4.01M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M12 15h4.01M12 21h4.01M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M12 15h4.01M12 21h4.01"
+                />
               </svg>
             </div>
             <h3 className="text-lg font-semibold text-gray-900 mb-2">
@@ -183,7 +216,9 @@ export default function Dashboard() {
           </div>
           <div className="bg-white rounded-lg shadow p-4 text-center">
             <div className="text-2xl font-bold text-green-600">
-              {userCredits.reduce((sum, credit) => sum + credit.totalCredits, 0).toLocaleString()}
+              {userCredits
+                .reduce((sum, credit) => sum + credit.totalCredits, 0)
+                .toLocaleString()}
             </div>
             <div className="text-sm text-gray-600">Total crédits</div>
           </div>
