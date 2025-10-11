@@ -30,6 +30,7 @@ export default function RootLayout({
       <meta name="theme-color" content="#000000" />
       <link rel="icon" href="/favicon.ico" />
       <body
+        suppressHydrationWarning={true}
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Providers>{children}</Providers>

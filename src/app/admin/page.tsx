@@ -1,6 +1,5 @@
 ;
 import Image from "next/image";
-"use client";
 
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
@@ -239,7 +238,7 @@ export default function Admin() {
               <div className="grid grid-cols-1 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Nom du marchand **
+                    Nom du marchand ***
                   </label>
                   <input
                     type="text"
