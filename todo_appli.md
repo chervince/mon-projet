@@ -25,13 +25,16 @@ Basé sur le brief dans `details_application.md`, voici toutes les étapes néce
 ### 1.2 Schéma Base de Données (Prisma)
 
 - [x] Modèle `User` : id, email, name, password (hash), role, createdAt
+- [x] Modèle `Account` : NextAuth accounts table
+- [x] Modèle `Session` : NextAuth sessions table
+- [x] Modèle `VerificationToken` : NextAuth verification tokens
 - [x] Modèle `Merchant` (Establishment) : id, name, logo, address, creditPercentage, threshold, validityMonths, merchantCode, qrCode, createdAt
-- [x] Relations de base (User, Merchant, Account, Session)
-- [x] Migrations Prisma initiales
+- [x] Modèle `Credit` : id, userId, merchantId, amount, expiresAt, createdAt
+- [x] Modèle `Voucher` : id, userId, merchantId, amount, qrCode, merchantCode, isUsed, usedAt, createdAt
+- [x] Modèle `ScanLog` : id, userId, merchantId, ticketAmount, creditsEarned, timestamp, ip
+- [x] Relations complètes entre tous les modèles
+- [x] Migrations Prisma appliquées avec succès
 - [x] Configuration binary targets pour Vercel (rhel-openssl-3.0.x)
-- [ ] Modèle `Credit` : id, userId, merchantId, amount, expiresAt, createdAt
-- [ ] Modèle `Voucher` : id, userId, merchantId, amount, qrCode, merchantCode, isUsed, usedAt, createdAt
-- [ ] Modèle `ScanLog` : id, userId, merchantId, ticketAmount, creditsEarned, timestamp, ip
 
 ### 1.3 Seed de Données
 
